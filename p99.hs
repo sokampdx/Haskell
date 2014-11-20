@@ -2,6 +2,57 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+-- p13
+encodeDirect :: (Eq a) => [a] -> [CountElem a]
+encodeDirect [] = []
+encodeDirect (x:xs) = encodeDirect1 1 x xs
+
+encodeDirect1 :: (Eq a) => Int -> a -> [a] -> [CountElem a]
+encodeDirect1 n x [] = [encodeElem n x]
+encodeDirect1 n x xs
+	| x == (head xs) = encodeDirect1 (n+1) x (tail xs)
+	| otherwise = [(encodeElem n x)] ++ (encodeDirect1 1 (head xs) (tail xs))
+
+encodeElem :: (Eq a) => Int -> a -> CountElem a
+encodeElem n x
+	| n == 1 = Single x
+	| otherwise = Multiple n x
+
+p13i=encodeDirect "aaaabccaadeeee"
+p13o=[Multiple 4 'a',Single 'b',Multiple 2 'c',Multiple 2 'a',Single 'd',Multiple 4 'e']
+test13 = p13i == p13o
+
+
+-- p12
+decodeModified :: (Eq a) => [CountElem a] -> [a]
+decodeModified [] = []
+decodeModified (x:xs) = (convertStr x)++(decodeModified xs)
+
+convertStr :: (Eq a) => CountElem a -> [a]
+convertStr (Single s) = buildstr 1 s
+convertStr (Multiple n s) = buildstr n s
+
+buildstr :: (Eq a) => Int -> a -> [a]
+buildstr n s 
+	| n == 0 = []
+	| otherwise = s:(buildstr (n-1) s)
+
+p12i=decodeModified [Multiple 4 'a',Single 'b',Multiple 2 'c',Multiple 2 'a',Single 'd',Multiple 4 'e']
+p12o="aaaabccaadeeee"
+test12=p12i==p12o
+
+
 -- p11
 data CountElem a 
 	= Single a
