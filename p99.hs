@@ -4,8 +4,19 @@
 
 
 
+-- p15
+repli :: [a] -> Int -> [a]
+repli [] _ = []
+repli x 1 = x
+repli (x:xs) n = (repli1 x n) ++ (repli xs n)
 
+repli1 :: a -> Int -> [a]
+repli1 x 0 = []
+repli1 x n = [x] ++ (repli1 x (n-1)) 
 
+p15i = repli "abc" 3
+p15o = "aaabbbccc"
+test15 = p15i==p15o
 
 
 -- p14
@@ -16,7 +27,6 @@ dupli (x:xs) = [x,x]++(dupli xs)
 p14i = dupli [1, 2, 3] 
 p14o = [1,1,2,2,3,3]
 test14 = p14i==p14o
-
 
 
 -- p13
