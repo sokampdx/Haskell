@@ -1,7 +1,19 @@
 
 
+-- p16
+dropEvery :: [a] -> Int -> [a]
+dropEvery [] _ = []
+dropEvery x 0 = x
+dropEvery x n = dropEveryC x n 1
 
+dropEveryC [] _ _ = []
+dropEveryC (x:xs) n c
+	| n == c = dropEveryC xs n 1
+	| otherwise = x:(dropEveryC xs n (c+1))
 
+p16i = dropEvery "abcdefghik" 3
+p16o = "abdeghk"
+test16 = p16i==p16o
 
 
 -- p15
