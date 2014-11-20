@@ -8,8 +8,14 @@
 
 
 
+-- p14
+dupli :: [a] -> [a]
+dupli [] = []
+dupli (x:xs) = [x,x]++(dupli xs)
 
-
+p14i = dupli [1, 2, 3] 
+p14o = [1,1,2,2,3,3]
+test14 = p14i==p14o
 
 
 
