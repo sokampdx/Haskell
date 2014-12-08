@@ -3,9 +3,11 @@ import Data.List
 
 
 
+-- p25
+rnd_permu xs = rnd_select3 xs (length xs)
+
 -- p24
 diff_select n m = rnd_select3 [1..m] n
-
 
 -- p23
 rnd_select3 :: [a] -> Int -> [a]
