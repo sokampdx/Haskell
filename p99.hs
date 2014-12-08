@@ -1,18 +1,34 @@
+import System.Random
+import Data.List
 
+
+
+-- p24
+diff_select n m = rnd_select3 [1..m] n
 
 
 -- p23
-import System.Random
-rnd_select :: RandomGen g => [a] -> Int -> g -> ([a], g)
-rnd_select _ 0 gen = ([], gen)
-rnd_select [] _ gen = ([], gen)
-rnd_select x n gen 
-	| n == (length x) = (x, gen)
-	| otherwise = rnd_select (removeAt x (k+1)) n gen2
-	where (k, gen2) = randomR (0, (length 1) - 1) gen
+rnd_select3 :: [a] -> Int -> [a]
+rnd_select3 xs n = map (xs !!) is
+	where is = take n . nub $ randomRs (0, length xs - 1) (mkStdGen 100)
 
-rnd_selectIO :: [a] -> Int -> IO [a]
-rnd_selectIO x n = getStdRandom $ rnd_select x n
+rnd_select2 xs n = do
+	g <- newStdGen
+	return $ take n [ xs !! x | x <- randomRs (0, (length xs) - 1) g]
+
+
+--rnd_select :: [a] -> Int -> [a]
+rnd_select xs n = do
+	g <- newStdGen
+	print $ rndS xs n g
+
+--rndS :: RandomGen g => [a] -> Int -> g -> [a]
+rndS [] _ _ = []
+rndS xs n g
+	| n == 0 = []
+	| otherwise = (xs !! r) : rndS xs (n-1) gen
+	where (r, gen) = randomR (0, ((length xs) - 1)) g
+
 
 
 -- p22
@@ -81,9 +97,9 @@ test18 = p18i == p18o
 
 
 -- p17
-split :: [a] -> Int -> ([a],[a])
-split [] _ = ([], [])
-split xs n = (fstPart xs n, sndPart xs n)
+split' :: [a] -> Int -> ([a],[a])
+split' [] _ = ([], [])
+split' xs n = (fstPart xs n, sndPart xs n)
 
 fstPart [] _ = []
 fstPart (x:xs) n
@@ -102,7 +118,7 @@ split2 (x:xs) n
 	| otherwise = ([], x:xs)
 	where (ys, zs) = split2 xs (n-1)
 
-p17i = split "abcdefghik" 3
+p17i = split' "abcdefghik" 3
 p17o = ("abc", "defghik")
 test17 = p17i == p17o
 
