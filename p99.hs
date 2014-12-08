@@ -1,5 +1,112 @@
 
 
+
+-- p23
+import System.Random
+rnd_select :: RandomGen g => [a] -> Int -> g -> ([a], g)
+rnd_select _ 0 gen = ([], gen)
+rnd_select [] _ gen = ([], gen)
+rnd_select x n gen 
+	| n == (length x) = (x, gen)
+	| otherwise = rnd_select (removeAt x (k+1)) n gen2
+	where (k, gen2) = randomR (0, (length 1) - 1) gen
+
+rnd_selectIO :: [a] -> Int -> IO [a]
+rnd_selectIO x n = getStdRandom $ rnd_select x n
+
+
+-- p22
+range :: Int -> Int -> [Int]
+range start end
+	| start > end = []
+	| start == end = [end]
+	| otherwise = start:(range (start+1) end)
+
+p22i = range 4 9
+p22o = [4,5,6,7,8,9]
+test22 = p22i == p22o
+
+
+-- p21
+insertAt :: a -> [a] -> Int -> [a]
+insertAt x [] _ = [x]
+insertAt x (y:ys) n
+	| n > length(y:ys) = (y:ys) ++ [x]
+	| n <= 1 = x:(y:ys)
+	| otherwise = y:(insertAt x ys (n-1))
+
+p21i = insertAt 'X' "abcd" 2
+p21o = "aXbcd"
+test21 = p21i == p21o
+
+
+-- p20
+removeAt :: Int -> [a] -> (a, [a])
+removeAt n (x:xs) 
+	| n == 1 = (x, xs)
+	| otherwise = (ys, x:zs)
+		where (ys, zs) = removeAt (n-1) xs
+
+p20i = removeAt 2 "abcd"
+p20o = ('b', "acd")
+test20 = p20i == p20o
+
+-- p19
+rotate :: [a] -> Int -> [a]
+rotate [] _ = []
+rotate xs 0 = xs
+rotate (x:xs) n 
+	| n > 0 = rotate (xs++[x]) (n-1)
+	| otherwise = rotate (x:xs) (length (x:xs) + n)
+
+p19i1 = rotate "abcdefgh" 3
+p19o1 = "defghabc"
+p19i2 = rotate "abcdefgh" (-2)
+p19o2 = "ghabcdef"
+test19 = (p19i1 == p19o1) && (p19i2 == p19o2)
+
+
+
+-- p18
+slice :: [a] -> Int -> Int -> [a]
+slice [] _ _ = []
+slice (x:xs) a b
+	| a > 1 && b > 0 = slice xs (a-1) (b-1)
+	| b > 0 = x:(slice xs 0 (b-1))
+	| otherwise = []	
+
+p18i = slice "abcdefghijk" 3 7
+p18o = "cdefg"
+test18 = p18i == p18o
+
+
+-- p17
+split :: [a] -> Int -> ([a],[a])
+split [] _ = ([], [])
+split xs n = (fstPart xs n, sndPart xs n)
+
+fstPart [] _ = []
+fstPart (x:xs) n
+	| n == 0 = []
+	| otherwise = x:(fstPart xs (n-1))
+
+sndPart [] _ = []
+sndPart (x:xs) n
+	| n == 0 = (x:xs)
+	| otherwise = sndPart xs (n-1) 
+
+split2 :: [a] -> Int -> ([a],[a])
+split2 [] _ = ([], [])
+split2 (x:xs) n
+	| n > 0 = (x:ys, zs)
+	| otherwise = ([], x:xs)
+	where (ys, zs) = split2 xs (n-1)
+
+p17i = split "abcdefghik" 3
+p17o = ("abc", "defghik")
+test17 = p17i == p17o
+
+
 -- p16
 dropEvery :: [a] -> Int -> [a]
 dropEvery [] _ = []
